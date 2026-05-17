@@ -1,0 +1,17 @@
+node_modules/
+*.log
+.DS_Store
+
+# Source data (large, not needed for deployment)
+宝贝作品/
+
+# Development screenshots
+*-check.png
+mobile-*.png
+homepage-real-data.png
+*-real-data.png
+artwork-classworks.png
+artwork-check.png
+
+# Built artifacts are committed (pre-built for Cloudflare Pages)
+public/artworks/

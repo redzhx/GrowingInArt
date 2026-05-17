@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>作品详情 — 成长画册</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand"><span class="emoji">🎨</span> 成长画册</a>
+    <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">画册</a></li>
+      <li><a href="yifei.html">羿霏</a></li>
+      <li><a href="yicheng.html">羿丞</a></li>
+      <li><a href="timeline.html">时光轴</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="artwork-detail"></main>
+
+<div class="lightbox" id="lightbox">
+  <button class="close" onclick="closeLightbox()">&times;</button>
+  <button class="nav-btn prev" onclick="event.stopPropagation();navigateLightbox(-1)">&#8249;</button>
+  <div class="lightbox-img-wrap"><img id="lightbox-img" src="" alt=""></div>
+  <div class="info-bar" id="lightbox-info"></div>
+  <button class="nav-btn next" onclick="event.stopPropagation();navigateLightbox(1)">&#8250;</button>
+</div>
+
+<footer>羿霏 & 羿丞 的绘画成长记录 · 2013 — 2026</footer>
+
+<script src="js/data.js"></script><script src="js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  renderArtworkDetail(params.get('id'));
+});
+
+function renderArtworkDetail(id) {
+  const container = document.getElementById('artwork-detail');
+  let item = null;
+  for (const key of Object.keys(window)) {
+    if (key.startsWith('_gallery_')) {
+      const found = window[key].find(a => a.id === id);
+      if (found) { item = found; break; }
+    }
+  }
+  if (!item) item = artworks.find(a => a.id === id);
+  if (!item) {
+    container.innerHTML = '<div style="text-align:center;padding:8rem 0;color:var(--muted);font-family:var(--font-display);">找不到这幅作品呢 🎨</div>';
+    return;
+  }
+
+  const childBadge = item.child === 'yifei'
+    ? '<span class="child-badge yifei">羿霏</span>'
+    : '<span class="child-badge yicheng">羿丞</span>';
+
+  const extraImages = item.extraImages || [];
+  const imagesRow = extraImages.length > 0 ? `<div class="images-row">${extraImages.map(img => `<img src="${img}" alt="" onclick="document.getElementById('main-artwork-img').src='${img}'">`).join('')}</div>` : '';
+
+  // Scene strip
+  const sceneMedia = item.sceneMedia || [];
+  const sceneStrip = sceneMedia.length > 0 ? `
+    <div class="scene-strip">
+      <div class="scene-header">
+        <span class="scene-title">&#128247; 创作现场</span>
+        <span class="scene-sub">${sceneMedia.filter(m=>m.type==='image').length} 张照片 · ${sceneMedia.filter(m=>m.type==='video').length} 段视频</span>
+      </div>
+      <div class="scene-items">
+        ${sceneMedia.map((m, i) => m.type === 'video' ? `
+          <div class="scene-item video" onclick="openSceneLightbox(${i},${sceneMedia.length})">
+            <video src="${m.src}" preload="metadata"></video>
+            <div class="video-play">&#9654;</div>
+            <div class="scene-label">${m.label}</div>
+          </div>
+        ` : `
+          <div class="scene-item" onclick="openSceneLightbox(${i},${sceneMedia.length})">
+            <img src="${m.src}" alt="${m.label}" loading="lazy">
+            <div class="scene-label">${m.label}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  ` : '';
+
+  // Classroom wall
+  const classWorks = item.classWorks || [];
+  const classroomWall = classWorks.length > 0 ? `
+    <div class="classroom-wall">
+      <div class="wall-header">
+        <span class="wall-title">&#127912; 课堂作品墙</span>
+        <span class="wall-sub">${formatDate(item.date)} · ${item.school||''} · ${classWorks.length} 位同学</span>
+        <span class="wall-hint">← 滑动 →</span>
+      </div>
+      <div class="wall-strip">
+        ${classWorks.map((cw, i) => `
+          <div class="wall-item${cw.isHero?' hero-work':''}" onclick="openWallLightbox(${i},${classWorks.length})">
+            <img src="${cw.img}" alt="${cw.name}" loading="lazy">
+            <div class="wall-label"><span class="wall-dot" style="background:${cw.isHero?'var(--yifei)':'var(--yicheng)'}"></span>${cw.name}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  ` : '';
+
+  if (classWorks.length > 0) window._classWorks = classWorks;
+  if (sceneMedia.length > 0) window._sceneMedia = sceneMedia;
+
+  // Sidebar sections
+  const teacherNote = item.teacherNote || '';
+  const processNote = item.processNote || '';
+  const classmates = item.classmates || [];
+  const backHref = item.child === 'yifei' ? 'yifei.html' : 'yicheng.html';
+
+  container.innerHTML = `
+    <div class="artwork-detail">
+      <div class="image-column">
+        <a href="${backHref}" class="back-link">&#8592; 返回作品集</a>
+        <div class="artwork-image-wrap">
+          <img src="${item.full}" alt="${item.title}" id="main-artwork-img" onclick="openMainImageLightbox('${item.full}','${item.title}')">
+          ${imagesRow}
+        </div>
+        ${sceneStrip}
+        ${classroomWall}
+      </div>
+      <div class="artwork-label">
+        <div class="label-card">
+          ${childBadge}
+          <div class="artwork-title">${item.title}</div>
+          <div class="artwork-date">${formatDate(item.date)}</div>
+          <table class="label-table" style="margin-top:0.75rem">
+            <tr><td>日期</td><td>${formatDate(item.date)}</td></tr>
+            <tr><td>年龄</td><td>${formatAge(item.age)}</td></tr>
+            ${item.school?`<tr><td>画室</td><td>${item.school}</td></tr>`:''}
+            ${item.medium?`<tr><td>媒介</td><td>${item.medium}</td></tr>`:''}
+          </table>
+        </div>
+        ${teacherNote ? `<div class="label-card"><div style="font-family:var(--font-display);font-size:0.9rem;margin-bottom:0.5rem;">&#128221; 老师点评</div><div class="teacher-note">${teacherNote}</div></div>` : ''}
+        ${processNote ? `<div class="label-card"><div style="font-family:var(--font-display);font-size:0.9rem;margin-bottom:0.5rem;">&#9997; 创作历程</div><div class="teacher-note" style="font-style:normal">${processNote}</div></div>` : ''}
+        ${classmates.length > 0 ? `<div class="label-card"><div style="font-family:var(--font-display);font-size:0.9rem;margin-bottom:0.5rem;">&#128103; 同课同学</div><div class="classmates-list">${classmates.map(c=>`<span class="classmate-tag">${c}</span>`).join('')}</div></div>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+// Lightbox functions
+function openMainImageLightbox(src, title) {
+  const lb = document.getElementById('lightbox');
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox-info').textContent = title;
+  lb.classList.add('open'); document.body.style.overflow = 'hidden';
+  lb.querySelector('.nav-btn.prev').style.display = 'none';
+  lb.querySelector('.nav-btn.next').style.display = 'none';
+  window._singleImageLightbox = true;
+}
+
+function openSceneLightbox(index, total) {
+  window._sceneLightboxItems = window._sceneMedia || [];
+  window._sceneLightboxIndex = index;
+  window._sceneLightboxMode = true;
+  window._singleImageLightbox = false;
+  updateSceneLightbox();
+  const lb = document.getElementById('lightbox');
+  lb.classList.add('open'); document.body.style.overflow = 'hidden';
+  lb.querySelector('.nav-btn.prev').style.display = (total > 1) ? '' : 'none';
+  lb.querySelector('.nav-btn.next').style.display = (total > 1) ? '' : 'none';
+}
+function updateSceneLightbox() {
+  const items = window._sceneLightboxItems || [];
+  const m = items[window._sceneLightboxIndex || 0];
+  if (!m) return;
+  const wrap = document.querySelector('.lightbox-img-wrap');
+  if (m.type === 'video') {
+    wrap.innerHTML = `<video src="${m.src}" controls autoplay style="max-width:85vw;max-height:75vh;border-radius:8px"></video>`;
+  } else {
+    wrap.innerHTML = `<img src="${m.src}" alt="${m.label}" style="max-width:85vw;max-height:75vh;object-fit:contain;border-radius:8px">`;
+  }
+  document.getElementById('lightbox-info').textContent = m.label;
+}
+
+function openWallLightbox(index, total) {
+  window._wallLightboxItems = window._classWorks || [];
+  window._wallLightboxIndex = index;
+  updateWallLightbox();
+  const lb = document.getElementById('lightbox');
+  lb.classList.add('open'); document.body.style.overflow = 'hidden';
+  lb.querySelector('.nav-btn.prev').style.display = (total > 1) ? '' : 'none';
+  lb.querySelector('.nav-btn.next').style.display = (total > 1) ? '' : 'none';
+  window._singleImageLightbox = false;
+}
+function updateWallLightbox() {
+  const items = window._wallLightboxItems || [];
+  const item = items[window._wallLightboxIndex || 0];
+  if (item) {
+    document.getElementById('lightbox-img').src = item.img;
+    document.getElementById('lightbox-info').textContent = item.name;
+  }
+}
+
+// Override global navigate/close
+const origNavigate = navigateLightbox;
+navigateLightbox = function(dir) {
+  if (window._singleImageLightbox) return;
+  if (window._sceneLightboxMode && window._sceneLightboxItems) {
+    const items = window._sceneLightboxItems;
+    let idx = window._sceneLightboxIndex || 0;
+    idx = (idx + dir + items.length) % items.length;
+    window._sceneLightboxIndex = idx;
+    updateSceneLightbox();
+    return;
+  }
+  if (window._wallLightboxItems && window._wallLightboxItems.length > 0) {
+    const items = window._wallLightboxItems;
+    let idx = window._wallLightboxIndex || 0;
+    idx = (idx + dir + items.length) % items.length;
+    window._wallLightboxIndex = idx;
+    updateWallLightbox();
+    return;
+  }
+  origNavigate(dir);
+};
+
+const origClose = closeLightbox;
+closeLightbox = function() {
+  window._sceneLightboxMode = false;
+  window._sceneLightboxItems = null;
+  window._singleImageLightbox = false;
+  const wrap = document.querySelector('.lightbox-img-wrap');
+  if (wrap) wrap.innerHTML = '<img id="lightbox-img" src="" alt="">';
+  origClose();
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>成长画册 · 羿霏 & 羿丞</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand"><span class="emoji">🎨</span> 成长画册</a>
+    <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">画册</a></li>
+      <li><a href="yifei.html">羿霏</a></li>
+      <li><a href="yicheng.html">羿丞</a></li>
+      <li><a href="timeline.html">时光轴</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="dot-row">
+    <span class="d" style="background:var(--yifei)"></span>
+    <span class="d" style="background:var(--mint)"></span>
+    <span class="d" style="background:var(--lavender)"></span>
+    <span class="d" style="background:var(--yellow)"></span>
+    <span class="d" style="background:var(--sky)"></span>
+  </div>
+  <h1>从涂鸦到素描<br>一场<span class="hl-yifei">十三年</span>的成长记录</h1>
+  <p class="subtitle">
+    羿霏和羿丞是一对双胞胎，从三岁开始在画纸上探索世界。
+    这里收藏了他们每一次落笔、每一幅习作，以及那些关于色彩和形状的好奇心。
+  </p>
+  <div class="hero-mini">
+    <span>2013 — 2026</span>
+    <span>238 篇记录</span>
+    <span>860+ 幅作品</span>
+  </div>
+</section>
+
+<div class="child-cards">
+  <a href="yifei.html" class="child-card yifei">
+    <div class="avatar">霏</div>
+    <div class="name">羿霏 · 圆圆</div>
+    <div class="sub">美术高中在读 · 备考美院<br>从水粉涂鸦到长期素描</div>
+    <div class="badge">持续创作中</div>
+  </a>
+  <a href="yicheng.html" class="child-card yicheng">
+    <div class="avatar">丞</div>
+    <div class="name">羿丞 · 成成</div>
+    <div class="sub">童年时期与姐姐一起学画<br>充满童趣的艺术探索</div>
+    <div class="badge">童年艺术旅程</div>
+  </a>
+</div>
+
+<div class="section">
+  <div class="section-header">
+    <h2>近期作品</h2>
+    <a href="yifei.html" class="see-all">浏览全部 &rarr;</a>
+  </div>
+  <div class="gallery" id="recent-gallery"></div>
+</div>
+
+<div class="section">
+  <div class="section-header"><h2>学艺之路</h2></div>
+  <div class="timeline-page" style="padding:0">
+    <div class="timeline-era">
+      <div class="era-header"><span class="era-years">2024-2026</span><span class="era-label">天艺四方 · 美术高中</span></div>
+      <div class="era-line"></div>
+      <p style="color:var(--muted);font-size:0.85rem;line-height:1.8;">羿霏进入美术高中，系统训练素描、速写、色彩，备考美院。</p>
+    </div>
+    <div class="timeline-era">
+      <div class="era-header"><span class="era-years">2021-2023</span><span class="era-label">玩美之徒 · 素描进阶</span></div>
+      <div class="era-line"></div>
+      <p style="color:var(--muted);font-size:0.85rem;line-height:1.8;">羿霏开始系统学习素描，探索创意素描、彩铅、漫画。羿丞同期学习点彩和建筑彩铅。</p>
+    </div>
+    <div class="timeline-era">
+      <div class="era-header"><span class="era-years">2018-2020</span><span class="era-label">雨花树美术</span></div>
+      <div class="era-line"></div>
+    </div>
+    <div class="timeline-era">
+      <div class="era-header"><span class="era-years">2015-2017</span><span class="era-label">新点美术 · 东城国际</span></div>
+      <div class="era-line"></div>
+      <p style="color:var(--muted);font-size:0.85rem;line-height:1.8;">水粉、立体画、线条画、卡通动漫——童年最丰富的探索期。姐弟俩一起上课，互相陪伴。</p>
+    </div>
+    <div class="timeline-era">
+      <div class="era-header"><span class="era-years">2013-2014</span><span class="era-label">天智创意美术 · 幼儿园</span></div>
+      <div class="era-line"></div>
+      <p style="color:var(--muted);font-size:0.85rem;line-height:1.8;">三岁，第一幅画从这里开始。</p>
+    </div>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox">
+  <button class="close" onclick="closeLightbox()">&times;</button>
+  <button class="nav-btn prev" onclick="event.stopPropagation();navigateLightbox(-1)">&#8249;</button>
+  <div class="lightbox-img-wrap"><img id="lightbox-img" src="" alt=""></div>
+  <div class="info-bar" id="lightbox-info"></div>
+  <button class="nav-btn next" onclick="event.stopPropagation();navigateLightbox(1)">&#8250;</button>
+</div>
+
+<footer>羿霏 & 羿丞 的绘画成长记录 · 2013 — 2026</footer>
+
+<script src="js/data.js"></script><script src="js/app.js"></script>
+<script>document.addEventListener('DOMContentLoaded',()=>{renderGallery('recent-gallery',(typeof galleryArtworks !== 'undefined' ? galleryArtworks : artworks).slice(0,8));});</script>
+</body>
+</html>

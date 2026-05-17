@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>羿丞 · 成成 — 成长画册</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand"><span class="emoji">🎨</span> 成长画册</a>
+    <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">画册</a></li>
+      <li><a href="yifei.html">羿霏</a></li>
+      <li><a href="yicheng.html" class="active">羿丞</a></li>
+      <li><a href="timeline.html">时光轴</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="child-hero yicheng">
+  <div class="dot-row">
+    <span class="d" style="background:var(--yicheng)"></span>
+    <span class="d" style="background:var(--mint)"></span>
+    <span class="d" style="background:var(--sky)"></span>
+  </div>
+  <div class="child-initial">丞</div>
+  <h1>羿丞 · 成成</h1>
+  <p class="hero-desc">2010年8月28日 · 3岁起学画<br>童年时期与姐姐一起探索艺术世界<br>那些一起画过的水粉课、立体画、卡通动漫，都是最好的回忆</p>
+  <div class="hero-tags">
+    <span class="hero-tag">童年艺术旅程</span>
+    <span class="hero-tag">双胞胎弟弟</span>
+  </div>
+</section>
+
+<div class="filters">
+  <button class="filter-btn active">全部作品</button>
+  <button class="filter-btn">2021-2023</button>
+  <button class="filter-btn">2018-2020</button>
+  <button class="filter-btn">2015-2017</button>
+  <button class="filter-btn">2013-2014</button>
+</div>
+
+<div class="section" style="padding-top:0"><div class="gallery" id="yicheng-gallery"></div></div>
+
+<div class="lightbox" id="lightbox">
+  <button class="close" onclick="closeLightbox()">&times;</button>
+  <button class="nav-btn prev" onclick="event.stopPropagation();navigateLightbox(-1)">&#8249;</button>
+  <div class="lightbox-img-wrap"><img id="lightbox-img" src="" alt=""></div>
+  <div class="info-bar" id="lightbox-info"></div>
+  <button class="nav-btn next" onclick="event.stopPropagation();navigateLightbox(1)">&#8250;</button>
+</div>
+
+<footer>羿霏 & 羿丞 的绘画成长记录 · 2013 — 2026</footer>
+
+<script src="js/data.js"></script><script src="js/app.js"></script>
+<script>document.addEventListener('DOMContentLoaded',()=>{renderGallery('yicheng-gallery',(typeof yichengArtworks !== 'undefined' ? yichengArtworks : artworks.filter(a=>a.child==='yicheng'||a.child==='both')),'yicheng');});</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "growinginart",
+  "version": "1.0.0",
+  "description": "记录 2013–2026 年间孩子们的绘画与手工成长轨迹。内容从有道云笔记导出，包含 460+ 条笔记及对应的作品图片、视频等素材。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "sharp": "^0.34.5"
+  }
+}

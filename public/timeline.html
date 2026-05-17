@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>时光轴 — 成长画册</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand"><span class="emoji">🎨</span> 成长画册</a>
+    <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">画册</a></li>
+      <li><a href="yifei.html">羿霏</a></li>
+      <li><a href="yicheng.html">羿丞</a></li>
+      <li><a href="timeline.html" class="active">时光轴</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="timeline-page">
+  <div class="dot-row">
+    <span class="d" style="background:var(--yifei)"></span>
+    <span class="d" style="background:var(--lavender)"></span>
+    <span class="d" style="background:var(--mint)"></span>
+    <span class="d" style="background:var(--yellow)"></span>
+    <span class="d" style="background:var(--sky)"></span>
+  </div>
+  <h1>时 光 轴</h1>
+  <p style="text-align:center;color:var(--muted);font-size:0.9rem;margin-top:-1.5rem;margin-bottom:2.5rem;">十三年绘画成长，一步一脚印</p>
+  <div id="timeline-content"></div>
+</div>
+
+<footer>羿霏 & 羿丞 的绘画成长记录 · 2013 — 2026</footer>
+
+<script src="js/data.js"></script><script src="js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Group artworks by period
+  const periods = [
+    { years: '2024-2026', label: '天艺四方 · 美术高中', start: '2024', end: '2026' },
+    { years: '2021-2023', label: '玩美之徒 · 素描进阶', start: '2021', end: '2023' },
+    { years: '2018-2020', label: '雨花树美术', start: '2018', end: '2020' },
+    { years: '2015-2017', label: '新点美术 · 东城国际', start: '2015', end: '2017' },
+    { years: '2013-2014', label: '天智创意美术 · 幼儿园', start: '2013', end: '2014' },
+  ];
+
+  const container = document.getElementById('timeline-content');
+  container.innerHTML = periods.map(period => {
+    const items = artworks.filter(a => {
+      const year = parseInt(a.date.substring(0, 4));
+      return year >= parseInt(period.start) && year <= parseInt(period.end);
+    });
+    if (items.length === 0) return '';
+    return `
+      <div class="timeline-era">
+        <div class="era-header">
+          <span class="era-years">${period.years}</span>
+          <span class="era-label">${period.label}</span>
+          <span style="font-size:0.78rem;color:var(--muted-light);margin-left:auto;">${items.length} 件</span>
+        </div>
+        <div class="era-line"></div>
+        <div class="timeline-grid">
+          ${items.map(item => `
+            <a href="artwork.html?id=${item.id}" class="timeline-item">
+              <span class="dot" style="background:${item.child === 'yifei' ? 'var(--yifei)' : 'var(--yicheng)'}"></span>
+              <span class="item-title">${item.title}</span>
+              <span class="item-date">${formatDate(item.date).substring(5)}</span>
+            </a>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+});
+</script>
+</body>
+</html>
