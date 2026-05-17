@@ -1,0 +1,8 @@
+/*.webp
+  Content-Type: image/webp
+
+/*.mp4
+  Content-Type: video/mp4
+
+/*.mov
+  Content-Type: video/quicktime
