@@ -92,8 +92,8 @@ function renderArtworkDetail(id) {
   const classroomWall = classWorks.length > 0 ? `
     <div class="classroom-wall">
       <div class="wall-header">
-        <span class="wall-title">&#127912; 课堂作品墙</span>
-        <span class="wall-sub">${formatDate(item.date)} · ${item.school||''} · ${classWorks.length} 位同学</span>
+        <span class="wall-title">&#127912; 课堂展示</span>
+        <span class="wall-sub">${item.school||''}</span>
         <span class="wall-hint">← 滑动 →</span>
       </div>
       <div class="wall-strip">
@@ -110,39 +110,58 @@ function renderArtworkDetail(id) {
   if (classWorks.length > 0) window._classWorks = classWorks;
   if (sceneMedia.length > 0) window._sceneMedia = sceneMedia;
 
-  // Sidebar sections
+  // Notes sections (moved under the image for variable-length content)
   const teacherNote = item.teacherNote || '';
   const processNote = item.processNote || '';
   const classmates = item.classmates || [];
+  const hasNotes = teacherNote || processNote || classmates.length > 0;
+
+  const notesHtml = hasNotes ? `
+    <div class="artwork-notes">
+      ${teacherNote ? `
+        <div class="note-card">
+          <div class="note-header">&#128221; 小记</div>
+          <div class="note-body">${teacherNote}</div>
+        </div>
+      ` : ''}
+      ${processNote ? `
+        <div class="note-card">
+          <div class="note-header">&#9997; 创作历程</div>
+          <div class="note-body">${processNote}</div>
+        </div>
+      ` : ''}
+      ${classmates.length > 0 ? `
+        <div class="note-card">
+          <div class="note-header">&#128103; 同课同学</div>
+          <div class="classmates-list">${classmates.map(c=>`<span class="classmate-tag">${c}</span>`).join('')}</div>
+        </div>
+      ` : ''}
+    </div>
+  ` : '';
+
   const backHref = item.child === 'yifei' ? 'yifei.html' : 'yicheng.html';
 
   container.innerHTML = `
     <div class="artwork-detail">
-      <div class="image-column">
-        <a href="${backHref}" class="back-link">&#8592; 返回作品集</a>
-        <div class="artwork-image-wrap">
-          <img src="${item.full}" alt="${item.title}" id="main-artwork-img" onclick="openMainImageLightbox('${item.full}','${item.title}')">
-          ${imagesRow}
+      <a href="${backHref}" class="back-link">&#8592; 返回作品集</a>
+      <div class="artwork-head">
+        <div class="artwork-head-top">${childBadge}</div>
+        <div class="artwork-head-title">${item.title}</div>
+        <div class="artwork-head-meta">
+          <span>${formatDate(item.date)}</span>
+          <span class="sep">·</span>
+          <span>${formatAge(item.age)}</span>
+          ${item.school ? `<span class="sep">·</span><span>${item.school}</span>` : ''}
+          ${item.medium ? `<span class="sep">·</span><span>${item.medium}</span>` : ''}
         </div>
-        ${sceneStrip}
-        ${classroomWall}
       </div>
-      <div class="artwork-label">
-        <div class="label-card">
-          ${childBadge}
-          <div class="artwork-title">${item.title}</div>
-          <div class="artwork-date">${formatDate(item.date)}</div>
-          <table class="label-table" style="margin-top:0.75rem">
-            <tr><td>日期</td><td>${formatDate(item.date)}</td></tr>
-            <tr><td>年龄</td><td>${formatAge(item.age)}</td></tr>
-            ${item.school?`<tr><td>画室</td><td>${item.school}</td></tr>`:''}
-            ${item.medium?`<tr><td>媒介</td><td>${item.medium}</td></tr>`:''}
-          </table>
-        </div>
-        ${teacherNote ? `<div class="label-card"><div style="font-family:var(--font-display);font-size:0.9rem;margin-bottom:0.5rem;">&#128221; 老师点评</div><div class="teacher-note">${teacherNote}</div></div>` : ''}
-        ${processNote ? `<div class="label-card"><div style="font-family:var(--font-display);font-size:0.9rem;margin-bottom:0.5rem;">&#9997; 创作历程</div><div class="teacher-note" style="font-style:normal">${processNote}</div></div>` : ''}
-        ${classmates.length > 0 ? `<div class="label-card"><div style="font-family:var(--font-display);font-size:0.9rem;margin-bottom:0.5rem;">&#128103; 同课同学</div><div class="classmates-list">${classmates.map(c=>`<span class="classmate-tag">${c}</span>`).join('')}</div></div>` : ''}
+      <div class="artwork-image-wrap">
+        <img src="${item.full}" alt="${item.title}" id="main-artwork-img" onclick="openMainImageLightbox('${item.full}','${item.title}')">
+        ${imagesRow}
       </div>
+      ${sceneStrip}
+      ${classroomWall}
+      ${notesHtml ? `<div class="artwork-supplement">${notesHtml}</div>` : ''}
     </div>
   `;
 }

@@ -35,7 +35,7 @@ function renderGallery(containerId, items, storeKey) {
 }
 
 function viewArtwork(id) {
-  window.location.href = 'artwork.html?id=' + id;
+  window.location.href = '/artwork?id=' + encodeURIComponent(id);
 }
 
 // === Lightbox (for gallery pages) ===

@@ -221,13 +221,25 @@ nav.scrolled { border-bottom-color: var(--border); }
 
 /* === Artwork Detail Page === */
 .artwork-detail {
-  max-width: 1000px; margin: 0 auto; padding: 5rem 1.5rem 3rem;
-  display: grid; grid-template-columns: minmax(0, 1fr) 340px;
-  gap: 2.5rem; align-items: start;
+  max-width: 1200px; margin: 0 auto; padding: 5rem 1.5rem 3rem;
 }
-.artwork-detail .image-column { min-width: 0; overflow: hidden; }
-@media (max-width: 860px) {
-  .artwork-detail { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+
+/* Artwork head banner (above image) */
+.artwork-head {
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+}
+.artwork-head .artwork-head-title {
+  font-family: var(--font-display); font-size: 1.5rem;
+  color: var(--ink); line-height: 1.35; margin: 0.4rem 0;
+}
+.artwork-head .artwork-head-meta {
+  font-size: 0.85rem; color: var(--muted);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem;
+}
+.artwork-head .artwork-head-meta .sep {
+  margin: 0 0.15rem; color: var(--muted-light);
 }
 
 .artwork-image-wrap {
@@ -246,34 +258,12 @@ nav.scrolled { border-bottom-color: var(--border); }
 }
 .artwork-image-wrap .images-row img:hover { border-color: var(--yifei); }
 
-/* Sidebar label */
-.artwork-label { position: sticky; top: 76px; }
-.artwork-label .label-card {
-  background: var(--card); border-radius: var(--radius);
-  border: 1px solid var(--border); padding: 1.25rem 1.25rem;
-  box-shadow: var(--shadow);
+/* Supplement section (notes below image) */
+.artwork-supplement {
+  margin-top: 2rem; padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
 }
-.artwork-label .label-card + .label-card { margin-top: 0.75rem; }
-
-.artwork-label .artwork-title {
-  font-family: var(--font-display); font-size: 1.3rem; color: var(--ink);
-  line-height: 1.35; margin-bottom: 0.25rem;
-}
-.artwork-label .artwork-date {
-  font-size: 0.82rem; color: var(--muted);
-}
-
-.label-table { width: 100%; font-size: 0.8rem; border-collapse: collapse; }
-.label-table tr:not(:last-child) { border-bottom: 1px solid var(--border); }
-.label-table td { padding: 0.5rem 0; vertical-align: top; }
-.label-table td:first-child { color: var(--muted); width: 52px; }
-
-.artwork-label .teacher-note {
-  font-size: 0.84rem; color: var(--ink-soft); line-height: 1.85;
-}
-.artwork-label .teacher-note .highlight {
-  background: var(--yifei-soft); padding: 0.1em 0.3em; border-radius: 3px;
-}
+.artwork-supplement .artwork-notes { margin-top: 0; }
 
 .classmates-list { display: flex; flex-wrap: wrap; gap: 0.35rem; }
 .classmate-tag {
@@ -294,6 +284,28 @@ nav.scrolled { border-bottom-color: var(--border); }
   margin-bottom: 0.75rem; transition: color 0.25s;
 }
 .back-link:hover { color: var(--ink); }
+
+/* === Artwork Notes (under the image) === */
+.artwork-notes { margin-top: 1rem; }
+
+.artwork-notes .note-card {
+  background: var(--card); border-radius: var(--radius);
+  border: 1px solid var(--border); padding: 1rem 1.25rem;
+  box-shadow: var(--shadow);
+}
+.artwork-notes .note-card + .note-card { margin-top: 0.75rem; }
+
+.artwork-notes .note-header {
+  font-family: var(--font-display); font-size: 0.9rem;
+  margin-bottom: 0.5rem; color: var(--ink);
+}
+
+.artwork-notes .note-body {
+  font-size: 0.85rem; color: var(--ink-soft); line-height: 1.85;
+}
+.artwork-notes .note-body .highlight {
+  background: var(--yifei-soft); padding: 0.1em 0.3em; border-radius: 3px;
+}
 
 /* === Scene Strip === */
 .scene-strip {
